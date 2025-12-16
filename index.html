@@ -104,38 +104,42 @@
   <h1>🎄 Feliz Navidad 2025 🎄</h1>
   <div id="mensaje">Que la paz y la alegría llenen tu hogar ✨</div>  <div id="timer">Cargando temporizador…</div><button class="boton" onclick="reproducirMusica()">🔔 Música navideña</button>
 
-  <!-- Música: Campanas mil al viento van --><audio id="musica" src="campanas.mp3" preload="auto"></audio>
+<audio id="musica" src="campanas.mp3" preload="auto"></audio>
 
-  <div class="nieve" id="nieve"></div>  <div class="santa">🎅🛷</div>  <script>
-    /* Temporizador a Navidad 25 de diciembre 2025 */
+  <div class="nieve" id="nieve"></div>
+  <div class="santa">🎅🛷</div>  <script>
     const destino = new Date('December 25, 2025 00:00:00').getTime();
     const timer = document.getElementById('timer');
+    const audio = document.getElementById('musica');
+    let navidadActivada = false;
 
     setInterval(() => {
       const ahora = new Date().getTime();
       const diff = destino - ahora;
 
-      if (diff <= 0) {
+      if (diff <= 0 && !navidadActivada) {
+        navidadActivada = true;
         timer.textContent = '🎉 ¡Feliz Navidad! 🎉';
-        lanzarFuegos();
+        document.body.style.background = "url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat";
+        audio.play().catch(() => {});
+        lanzarFuegosContinuos();
         return;
       }
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-
-      timer.textContent = `${d} días ${h}h ${m}m ${s}s`;
+      if (diff > 0) {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        timer.textContent = `${d} días ${h}h ${m}m ${s}s`;
+      }
     }, 1000);
 
     function reproducirMusica() {
-      const audio = document.getElementById('musica');
       audio.currentTime = 0;
       audio.play();
     }
 
-    /* Nieve */
     const contenedor = document.getElementById('nieve');
     for (let i = 0; i < 80; i++) {
       const c = document.createElement('div');
@@ -147,16 +151,17 @@
       contenedor.appendChild(c);
     }
 
-    /* Fuegos artificiales */
-    function lanzarFuegos() {
-      for (let i = 0; i < 20; i++) {
-        const f = document.createElement('div');
-        f.className = 'firework';
-        f.style.left = Math.random() * window.innerWidth + 'px';
-        f.style.top = Math.random() * window.innerHeight + 'px';
-        document.body.appendChild(f);
-        setTimeout(() => f.remove(), 1000);
-      }
+    function lanzarFuegosContinuos() {
+      setInterval(() => {
+        for (let i = 0; i < 15; i++) {
+          const f = document.createElement('div');
+          f.className = 'firework';
+          f.style.left = Math.random() * window.innerWidth + 'px';
+          f.style.top = Math.random() * window.innerHeight + 'px';
+          document.body.appendChild(f);
+          setTimeout(() => f.remove(), 1000);
+        }
+      }, 1200);
     }
   </script></body>
 </html>
